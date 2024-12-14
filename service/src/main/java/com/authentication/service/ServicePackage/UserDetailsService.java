@@ -1,6 +1,7 @@
 package com.authentication.service.ServicePackage;
 
 import com.authentication.service.Repository.UserRepository;
+import com.authentication.service.model.LoginRequest;
 import com.authentication.service.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,11 +29,11 @@ public class UserDetailsService {
         return userRepository.save(user);
     }
 
-    public String verify(User user) {
-        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
+    public String verify(LoginRequest loginRequest) {
+        Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword()));
 
         if(authentication.isAuthenticated())
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(loginRequest.getEmail());
         return "false";
     }
 }
